@@ -1,0 +1,11 @@
+name: sentinel_one
+display: Sentinel One
+fields:
+- display: Base URL
+  name: base_url
+  type: text
+  required: true
+- display: Token
+  name: token
+  type: password
+  required: true

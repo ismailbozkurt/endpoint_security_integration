@@ -1,0 +1,15 @@
+name: crowdstrike
+display: Crowdstrike
+fields:
+- display: Base URL
+  name: base_url
+  type: text
+  required: true
+- display: Client ID
+  name: client_id
+  type: text
+  required: true
+- display: Client Secret
+  name: client_secret
+  type: password
+  required: true
