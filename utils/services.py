@@ -1,6 +1,8 @@
 from core.models import Product
 from typing import Dict, List
 import jsonschema
+from .products import type_fixer
+from utils.log import log
 
 
 def remove_keys(name):
@@ -20,6 +22,7 @@ def set_keys(name, keys: Dict):
         product.save()
         return product
     except Product.DoesNotExist:
+        log.error('Product not found with name: %s', name)
         return None
 
 
@@ -55,14 +58,9 @@ def generate_json_schema(fields: List[Dict]) -> Dict:
         if is_required:
             json_schema['required'].append(field_name)
 
-        _type = _type_fixer(field.get('type'))
+        _type = type_fixer(field.get('type'))
         json_schema['properties'][field_name] = {
             "type": _type
         }
 
     return json_schema
-
-
-def _type_fixer(_type):
-    if _type in ['text', 'password']:
-        return 'string'

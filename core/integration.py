@@ -5,8 +5,8 @@ class IntegrationService():
     __services = dict()
 
     @classmethod
-    def add_service(cls, name, module):
-        cls.__services.setdefault(name, module)
+    def add_service(cls, name, module: BaseProduct):
+        cls.__services[name] = module
 
     @classmethod
     def get_service(cls, name) -> BaseProduct:

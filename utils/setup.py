@@ -45,3 +45,8 @@ def add_product_to_db(name):
     except OperationalError as err:
         log.error('Product operational error %s | %s' % (name, err))
         pass
+
+
+def delete_products():
+    deleted, _ = Product.objects.all().delete()
+    log.debug('Products deleted: %d', deleted)

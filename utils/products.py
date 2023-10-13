@@ -52,3 +52,8 @@ def populate_test_data():
     IPList.objects.create(ip="192.168.10.3", product=s)
 
     IPList.objects.create(ip="192.168.10.1", product=cs)
+
+
+def type_fixer(_type):
+    if _type in ['text', 'password']:
+        return 'string'

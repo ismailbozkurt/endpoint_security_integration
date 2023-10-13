@@ -5,6 +5,7 @@ from core.integration import IntegrationService
 from core.base_product import BaseProduct
 from utils.products import get_products
 from .serializers import ProductSerializer
+from drf_spectacular.utils import extend_schema
 from utils.services import (
     validate_fields,
     set_keys,
@@ -12,6 +13,7 @@ from utils.services import (
 )
 
 
+@extend_schema(tags=['Product'])
 class ProductAPIView(APIView):
     serializer_class = ProductSerializer
 
@@ -20,16 +22,18 @@ class ProductAPIView(APIView):
         return Response(data, status=status.HTTP_200_OK)
 
 
+@extend_schema(exclude=True)
 class IntegrationAPIView(APIView):
     serializer_class = ProductSerializer
 
     def post(self, request, product):
         data = request.data
         if validate_fields(product, data):
-            product: BaseProduct = IntegrationService.get_service(product)
-            if product.integrate(keys=data):
-                product_obj = set_keys(product, data)
-                serializer = ProductSerializer(product_obj)
+            product_svc: BaseProduct = IntegrationService.get_service(product)
+            if product_svc.integrate(keys=data):
+                product = set_keys(product, data)
+                serializer = ProductSerializer(product)
+
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response({"error": "invalid schema"}, status=status.HTTP_400_BAD_REQUEST)
